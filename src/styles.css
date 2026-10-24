@@ -225,3 +225,72 @@ body {
 .legend-item i.ring {
   box-shadow: 0 0 0 1.5px var(--card), 0 0 0 3px var(--accent);
 }
+
+/* Chart */
+
+.chips {
+  display: flex;
+  gap: 6px;
+}
+
+.chip {
+  flex: 1;
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 11px;
+  font-family: inherit;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 34px;
+  margin-top: 12px;
+}
+
+.bars .bar {
+  flex: 1;
+  border-radius: 1px;
+  min-width: 1px;
+}
+
+.bars .b0 {
+  height: 4px;
+  background: var(--border);
+}
+
+.bars .b1 {
+  height: 17px;
+  background: var(--light);
+}
+
+.bars .b2 {
+  height: 30px;
+  background: var(--accent);
+}
+
+.month-labels {
+  display: flex;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.month-label {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 9px;
+  color: var(--muted);
+  white-space: nowrap;
+}
