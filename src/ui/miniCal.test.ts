@@ -70,6 +70,7 @@ describe('renderMiniCal', () => {
   });
 
   it('‹ flips to the previous half-year with both years in the header', () => {
+    localStorage.setItem('mmmdays.v1', JSON.stringify({ v: 1, days: { '2026-03-15': 1 } }));
     renderMiniCal(root, TODAY);
     (root.querySelector('.mini-prev') as HTMLButtonElement).click();
     expect(root.querySelector('.mini-title')?.textContent).toBe('Ноябрь 2025 – Апрель 2026');
@@ -104,15 +105,15 @@ describe('renderMiniCal', () => {
   it('swipe left goes older, swipe right goes back', () => {
     localStorage.setItem('mmmdays.v1', JSON.stringify({ v: 1, days: { '2026-03-15': 1 } }));
     renderMiniCal(root, TODAY);
-    swipe(root, -80, 0);
+    const card = root.querySelector('.mini-cal-card') as HTMLElement;
+    swipe(card, -80, 0);
     expect(root.querySelector('.mini-title')?.textContent).toBe('Ноябрь 2025 – Апрель 2026');
-    swipe(root, 80, 0);
+    swipe(card, 80, 0);
     expect(root.querySelector('.mini-title')?.textContent).toBe('Май – Октябрь 2026');
   });
 });
 
-function swipe(target: HTMLElement, dx: number, dy: number): void {
-  target.dispatchEvent(new TouchEvent('touchstart', { touches: [new Touch({ identifier: 0, target, clientX: 100, clientY: 100 })] }));
+function swipe(target: HTMLElement, dx: number, dy: number): void {  target.dispatchEvent(new TouchEvent('touchstart', { touches: [new Touch({ identifier: 0, target, clientX: 100, clientY: 100 })] }));
   target.dispatchEvent(
     new TouchEvent('touchend', {
       changedTouches: [new Touch({ identifier: 0, target, clientX: 100 + dx, clientY: 100 + dy })],

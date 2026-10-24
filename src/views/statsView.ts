@@ -5,6 +5,7 @@ import { parsePeriods } from '../logic/periods';
 import { getDays, subscribe } from '../store';
 import { el } from '../ui/dom';
 import { renderChart } from '../ui/chart';
+import { renderMiniCal } from '../ui/miniCal';
 
 let currentRoot: HTMLElement | null = null;
 let lastToday = new Date();
@@ -50,6 +51,7 @@ function draw(): void {
 
   const miniCal = el('div');
   miniCal.id = 'mini-cal-mount';
+  renderMiniCal(miniCal, today);
   root.appendChild(miniCal);
   const data = el('div');
   data.id = 'data-mount';

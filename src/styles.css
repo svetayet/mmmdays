@@ -288,6 +288,89 @@ body {
   margin-top: 10px;
 }
 
+/* Mini-calendar carousel */
+
+.mini-cal-card {
+  margin-top: 10px;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.mini-nav {
+  margin: 0 0 6px;
+}
+
+.mini-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mini-months {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 10px;
+}
+
+.mini-month-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+
+.mday {
+  height: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: var(--text);
+  border-radius: 50%;
+}
+
+.mday.empty {
+  visibility: hidden;
+}
+
+.mday.light {
+  background: var(--light);
+}
+
+.mday.heavy {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.mday.today {
+  box-shadow: 0 0 0 1px var(--card), 0 0 0 2px var(--accent);
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.dots i.active {
+  background: var(--accent);
+}
+
 /* Chart */
 
 .chips {
