@@ -288,6 +288,35 @@ body {
   margin-top: 10px;
 }
 
+/* Data card */
+
+.data-card {
+  margin-top: 10px;
+}
+
+.data-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.data-btn {
+  flex: 1;
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 12px;
+  font-family: inherit;
+  padding: 7px 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.data-input {
+  display: none;
+}
+
 /* Mini-calendar carousel */
 
 .mini-cal-card {

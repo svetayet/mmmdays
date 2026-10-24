@@ -30,6 +30,7 @@ export const dict: Record<Lang, Record<string, string>> = {
     'data.title': 'Данные',
     'data.export': 'Экспорт JSON',
     'data.import': 'Импорт JSON',
+    'data.importInvalid': 'Файл не похож на резервную копию MmmDays',
     'data.importConfirm': 'Добавится {a} дней, заменится {r}. Применить?',
   },
   en: {
@@ -61,6 +62,7 @@ export const dict: Record<Lang, Record<string, string>> = {
     'data.title': 'Data',
     'data.export': 'Export JSON',
     'data.import': 'Import JSON',
+    'data.importInvalid': 'This file does not look like a MmmDays backup',
     'data.importConfirm': 'Will add {a} days, replace {r}. Apply?',
   },
 };
