@@ -19,11 +19,11 @@ export function computeStatus(days: DaysMap, today: Date): Status {
   if (periods.length === 0) return { mode: 'no-data' };
 
   const todayKey = toKey(today);
-  const yesterdayKey = toKey(addDays(today, -1));
-  const last = periods[periods.length - 1];
-  const open = last.end === todayKey || last.end === yesterdayKey;
-  if (open) {
-    const anchor = last.firstHeavy ?? last.start;
+  const covering = periods.find(
+    (p) => p.start <= todayKey && todayKey <= toKey(addDays(fromKey(p.end), 1)),
+  );
+  if (covering) {
+    const anchor = covering.firstHeavy ?? covering.start;
     return { mode: 'in-progress', dayNumber: diffDays(fromKey(anchor), today) + 1 };
   }
 
