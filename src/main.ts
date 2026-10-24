@@ -1,5 +1,6 @@
 import './styles.css';
 import { getLang, setLang, t, type Lang } from './i18n';
+import { renderCalendarView } from './views/calendarView';
 
 export function mountApp(): void {
   const app = document.getElementById('app');
@@ -50,6 +51,7 @@ export function mountApp(): void {
   }
 
   app.append(header, calendarView, statsView, tabbar);
+  renderCalendarView(calendarView);
 }
 
 if (document.getElementById('app')) {

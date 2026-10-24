@@ -53,8 +53,8 @@ describe('daysWord', () => {
 });
 
 describe('monthName', () => {
-  it('long form in ru', () => {
-    expect(monthName(2026, 9)).toBe('октябрь');
+  it('long form in ru, capitalized as a calendar heading', () => {
+    expect(monthName(2026, 9)).toBe('Октябрь');
   });
 
   it('long form in en', () => {

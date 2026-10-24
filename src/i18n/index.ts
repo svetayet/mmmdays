@@ -34,8 +34,10 @@ export function daysWord(n: number, lang: Lang): string {
   return 'дней';
 }
 
+/** Standalone month label: capitalized for ru («Октябрь»), as calendar headings use. */
 export function monthName(year: number, month0: number, form: 'long' | 'short' = 'long'): string {
-  return new Intl.DateTimeFormat(current, { month: form }).format(new Date(year, month0, 1));
+  const raw = new Intl.DateTimeFormat(current, { month: form }).format(new Date(year, month0, 1));
+  return raw.charAt(0).toUpperCase() + raw.slice(1);
 }
 
 /** Monday-first weekday labels for the current language. */
