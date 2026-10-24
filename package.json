@@ -1,0 +1,17 @@
+{
+  "name": "mmmdays",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest run",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "happy-dom": "^18.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.7",
+    "vitest": "^3.2.4"
+  }
+}
