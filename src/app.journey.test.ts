@@ -29,7 +29,7 @@ describe('app journey', () => {
     const app = document.getElementById('app')!;
 
     // Calendar is the first screen and shows a status card.
-    expect(app.querySelector('#view-calendar')!.hidden).toBe(false);
+    expect(app.querySelector<HTMLElement>('#view-calendar')!.hidden).toBe(false);
     expect(app.querySelector('.status-main')?.textContent).toBeTruthy();
 
     // A tap cycles today's cell: none → light → heavy → none.
@@ -50,9 +50,11 @@ describe('app journey', () => {
     }
 
     // Switch to stats.
-    const statsTab = [...app.querySelectorAll('.tab-btn')].find((b) => b.dataset.view === 'view-stats')!;
+    const statsTab = [...app.querySelectorAll<HTMLElement>('.tab-btn')].find(
+      (b) => b.dataset.view === 'view-stats',
+    )!;
     statsTab.click();
-    const stats = app.querySelector('#view-stats') as HTMLElement;
+    const stats = app.querySelector<HTMLElement>('#view-stats')!;
     expect(stats.hidden).toBe(false);
     expect(stats.querySelector('.card-last .card-value')?.textContent).not.toBe('—');
     expect(stats.querySelectorAll('.tile-value')).toHaveLength(3);

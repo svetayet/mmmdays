@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import { configDefaults } from 'vitest/config';
 
 export default defineConfig({
   base: './',
@@ -27,5 +28,6 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     setupFiles: ['src/test/setup.ts'],
+    exclude: [...configDefaults.exclude, '.superpowers/**'],
   },
 });

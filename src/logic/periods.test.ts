@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import type { DaysMap } from '../types';
 import { parsePeriods } from './periods';
 
 describe('parsePeriods', () => {
   it('single continuous period with light start', () => {
-    const days = {
+    const days: DaysMap = {
       '2026-10-20': 1,
       '2026-10-21': 2,
       '2026-10-22': 2,
@@ -22,7 +23,7 @@ describe('parsePeriods', () => {
   });
 
   it('one-day gap does not break a period', () => {
-    const days = { '2026-11-01': 1, '2026-11-02': 2, '2026-11-04': 1 };
+    const days: DaysMap = { '2026-11-01': 1, '2026-11-02': 2, '2026-11-04': 1 };
     const periods = parsePeriods(days);
     expect(periods).toHaveLength(1);
     expect(periods[0].lengthDays).toBe(4);
@@ -30,7 +31,7 @@ describe('parsePeriods', () => {
   });
 
   it('two-day gap splits periods', () => {
-    const days = { '2026-11-01': 1, '2026-11-02': 2, '2026-11-05': 1 };
+    const days: DaysMap = { '2026-11-01': 1, '2026-11-02': 2, '2026-11-05': 1 };
     const periods = parsePeriods(days);
     expect(periods).toHaveLength(2);
     expect(periods[0].end).toBe('2026-11-02');
@@ -51,7 +52,7 @@ describe('parsePeriods', () => {
   });
 
   it('returns sorted periods regardless of key order in the map', () => {
-    const days = {
+    const days: DaysMap = {
       '2026-09-24': 2,
       '2026-10-21': 2,
       '2026-08-27': 2,

@@ -73,7 +73,7 @@ describe('buildBackup', () => {
 describe('renderDataCard', () => {
   it('export builds a Blob download named mmmdays-backup-YYYY-MM-DD.json', async () => {
     setDay('2026-10-15', 2);
-    const createObjectURL = vi.fn(() => 'blob:mock');
+    const createObjectURL = vi.fn((_blob: Blob) => 'blob:mock');
     const revokeObjectURL = vi.fn();
     vi.stubGlobal('URL', { createObjectURL, revokeObjectURL });
     const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
@@ -84,7 +84,7 @@ describe('renderDataCard', () => {
     const blob = createObjectURL.mock.calls[0][0] as Blob;
     expect(JSON.parse(await blob.text())).toMatchObject({ v: 1, days: { '2026-10-15': 2 } });
     expect(click.mock.calls.length).toBeGreaterThanOrEqual(1);
-    const anchor = click.mock.instances[0] as HTMLAnchorElement;
+    const anchor = click.mock.instances[0] as unknown as HTMLAnchorElement;
     expect(anchor.download).toBe('mmmdays-backup-2026-10-25.json');
     vi.unstubAllGlobals();
     click.mockRestore();
