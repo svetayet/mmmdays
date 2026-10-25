@@ -102,6 +102,23 @@ describe('renderMiniCal', () => {
     expect(dots[0].classList.contains('active')).toBe(true);
   });
 
+  it('‹ pages back even with no stored history', () => {
+    renderMiniCal(root, TODAY);
+    (root.querySelector('.mini-prev') as HTMLButtonElement).click();
+    expect(root.querySelector('.mini-title')?.textContent).toBe('Ноябрь 2025 – Апрель 2026');
+  });
+
+  it('dots grow as you page beyond data and mark the current page', () => {
+    renderMiniCal(root, TODAY);
+    expect(root.querySelectorAll('.dots i')).toHaveLength(1);
+    (root.querySelector('.mini-prev') as HTMLButtonElement).click();
+    const dots = [...root.querySelectorAll('.dots i')];
+    expect(dots).toHaveLength(2);
+    expect(dots[1].classList.contains('active')).toBe(true);
+    (root.querySelector('.mini-next') as HTMLButtonElement).click();
+    expect(root.querySelector('.mini-title')?.textContent).toBe('Май – Октябрь 2026');
+  });
+
   it('swipe left goes older, swipe right goes back', () => {
     localStorage.setItem('mmmdays.v1', JSON.stringify({ v: 1, days: { '2026-03-15': 1 } }));
     renderMiniCal(root, TODAY);

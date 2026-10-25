@@ -57,8 +57,8 @@ export function renderMiniCal(root: HTMLElement, today: Date = new Date()): void
 }
 
 function shift(delta: number): void {
-  const max = pageCount(earliestDay(getDays()), lastToday) - 1;
-  page = Math.min(Math.max(page + delta, 0), max);
+  // Back is always allowed (empty months render fine); forward stops at page 0.
+  page = Math.max(page + delta, 0);
   draw();
 }
 
@@ -102,7 +102,8 @@ function draw(): void {
   card.appendChild(grid);
 
   const dots = el('div', 'dots');
-  const total = pageCount(earliestDay(days), today);
+  // Dots cover the data extent and keep growing as the user pages beyond it.
+  const total = Math.max(pageCount(earliestDay(days), today), page + 1);
   for (let i = 0; i < total; i++) {
     const dot = el('i');
     if (i === page) dot.classList.add('active');

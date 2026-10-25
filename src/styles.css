@@ -337,7 +337,7 @@ body {
 .mini-months {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px 10px;
+  gap: 8px 18px; /* wide separation between the two month columns */
 }
 
 .mini-month-name {
@@ -351,7 +351,7 @@ body {
 .mini-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
+  gap: 1px 0; /* dates packed tightly side to side */
 }
 
 .mday {
