@@ -6,7 +6,10 @@ export interface Period {
   end: string;
   firstHeavy: string | null;
   hasHeavy: boolean;
+  /** Calendar days from start to end, light days included. */
   lengthDays: number;
+  /** Number of heavy (2) days in the period — how long it "lasts". */
+  heavyDays: number;
 }
 
 /**
@@ -17,22 +20,27 @@ export function parsePeriods(days: DaysMap): Period[] {
   const keys = Object.keys(days).sort();
   const periods: Period[] = [];
   for (const key of keys) {
+    const heavy = days[key] === 2;
     const prev = periods[periods.length - 1];
     const continues = prev && diffDays(fromKey(prev.end), fromKey(key)) <= 2;
     if (!continues) {
       periods.push({
         start: key,
         end: key,
-        firstHeavy: days[key] === 2 ? key : null,
-        hasHeavy: days[key] === 2,
+        firstHeavy: heavy ? key : null,
+        hasHeavy: heavy,
         lengthDays: 1,
+        heavyDays: heavy ? 1 : 0,
       });
     } else {
       prev.end = key;
       prev.lengthDays = diffDays(fromKey(prev.start), fromKey(key)) + 1;
-      if (days[key] === 2 && !prev.hasHeavy) {
-        prev.hasHeavy = true;
-        prev.firstHeavy = key;
+      if (heavy) {
+        prev.heavyDays += 1;
+        if (!prev.hasHeavy) {
+          prev.hasHeavy = true;
+          prev.firstHeavy = key;
+        }
       }
     }
   }

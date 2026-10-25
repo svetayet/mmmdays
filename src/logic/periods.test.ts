@@ -19,6 +19,20 @@ describe('parsePeriods', () => {
       firstHeavy: '2026-10-21',
       hasHeavy: true,
       lengthDays: 5,
+      heavyDays: 4,
+    });
+  });
+
+  it('light light heavy counts one heavy day', () => {
+    const days: DaysMap = { '2026-10-20': 1, '2026-10-21': 1, '2026-10-22': 2 };
+    const periods = parsePeriods(days);
+    expect(periods[0]).toEqual({
+      start: '2026-10-20',
+      end: '2026-10-22',
+      firstHeavy: '2026-10-22',
+      hasHeavy: true,
+      lengthDays: 3,
+      heavyDays: 1,
     });
   });
 

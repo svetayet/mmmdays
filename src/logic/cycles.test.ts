@@ -10,6 +10,7 @@ function period(firstHeavy: string, lengthDays = 5): Period {
     firstHeavy,
     hasHeavy: true,
     lengthDays,
+    heavyDays: lengthDays, // helper periods are all-heavy
   };
 }
 
@@ -20,6 +21,7 @@ function lightPeriod(start: string, lengthDays: number): Period {
     firstHeavy: null,
     hasHeavy: false,
     lengthDays,
+    heavyDays: 0,
   };
 }
 
@@ -72,7 +74,7 @@ describe('computeCycleStats', () => {
     expect(stats.regularity).toBe('even'); // spread of a single length is 0 ≤ 2
   });
 
-  it('light-only periods are excluded from starts but count into duration', () => {
+  it('light-only periods are excluded from starts and from duration', () => {
     const stats = computeCycleStats([
       lightPeriod('2026-05-02', 3),
       period('2026-06-08', 5),
@@ -80,7 +82,14 @@ describe('computeCycleStats', () => {
     ]);
     expect(stats.starts).toEqual(['2026-06-08']);
     expect(stats.avgCycle).toBeNull();
-    expect(stats.avgDuration).toBe(4); // (3 + 5 + 4) / 3
+    expect(stats.avgDuration).toBe(5); // only the heavy period counts
+  });
+
+  it('duration counts heavy days only: скудно, скудно, обильно lasts one day', () => {
+    const stats = computeCycleStats([
+      { start: '2026-10-20', end: '2026-10-22', firstHeavy: '2026-10-22', hasHeavy: true, lengthDays: 3, heavyDays: 1 },
+    ]);
+    expect(stats.avgDuration).toBe(1);
   });
 
   it('single length (two cycles) reads as even rhythm per the spec', () => {

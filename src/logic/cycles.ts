@@ -10,7 +10,7 @@ export interface CycleStats {
   lengths: number[];
   /** Mean of lengths, rounded; null with fewer than 2 cycles. */
   avgCycle: number | null;
-  /** Mean of period durations (all periods, light-only included), rounded. */
+  /** Mean of heavy-day counts per period («длится» = по обильным); light-only periods excluded. */
   avgDuration: number | null;
   /** The last completed cycle length. */
   lastCycleLength: number | null;
@@ -34,8 +34,9 @@ export function computeCycleStats(periods: Period[]): CycleStats {
     ? Math.round(lengths.reduce((s, n) => s + n, 0) / lengths.length)
     : null;
 
-  const avgDuration = periods.length > 0
-    ? Math.round(periods.reduce((s, p) => s + p.lengthDays, 0) / periods.length)
+  const heavyPeriods = periods.filter((p) => p.hasHeavy);
+  const avgDuration = heavyPeriods.length > 0
+    ? Math.round(heavyPeriods.reduce((s, p) => s + p.heavyDays, 0) / heavyPeriods.length)
     : null;
 
   const lastCycleLength = lengths.length > 0 ? lengths[lengths.length - 1] : null;
