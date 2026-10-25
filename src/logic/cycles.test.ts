@@ -64,12 +64,12 @@ describe('computeCycleStats', () => {
     expect(stats.avgDuration).toBe(5);
   });
 
-  it('two cycles: average and forecast appear, regularity still unknown', () => {
+  it('two cycles: average, forecast and first rhythm verdict appear', () => {
     const stats = computeCycleStats([period('2026-09-24'), period('2026-10-21')]);
     expect(stats.avgCycle).toBe(27);
     expect(stats.lastCycleLength).toBe(27);
     expect(stats.forecast).toBe('2026-11-17');
-    expect(stats.regularity).toBeNull();
+    expect(stats.regularity).toBe('even'); // spread of a single length is 0 ≤ 2
   });
 
   it('light-only periods are excluded from starts but count into duration', () => {
@@ -83,10 +83,10 @@ describe('computeCycleStats', () => {
     expect(stats.avgDuration).toBe(4); // (3 + 5 + 4) / 3
   });
 
-  it('single length (two cycles) gives no regularity', () => {
+  it('single length (two cycles) reads as even rhythm per the spec', () => {
     const stats = computeCycleStats([period('2026-08-25'), period('2026-09-19')]);
     expect(stats.lengths).toEqual([25]);
-    expect(stats.regularity).toBeNull();
+    expect(stats.regularity).toBe('even');
   });
 
   it('spread of 6 days is irregular', () => {

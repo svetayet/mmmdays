@@ -16,7 +16,7 @@ export interface CycleStats {
   lastCycleLength: number | null;
   /** Last start + avgCycle; null with fewer than 2 cycles. */
   forecast: string | null;
-  /** From lengths spread: <=2 even, 3-5 uneven, >5 irregular; null <2 lengths. */
+  /** From lengths spread: <=2 even, 3-5 uneven, >5 irregular; null with no lengths. */
   regularity: Regularity | null;
 }
 
@@ -45,7 +45,8 @@ export function computeCycleStats(periods: Period[]): CycleStats {
     : null;
 
   let regularity: Regularity | null = null;
-  if (lengths.length >= 2) {
+  if (lengths.length >= 1) {
+    // Spec: «ритм: ровно» при разбросе ≤ 2 дней; one length → spread 0 → even.
     const spread = Math.max(...lengths) - Math.min(...lengths);
     regularity = spread <= 2 ? 'even' : spread <= 5 ? 'uneven' : 'irregular';
   }
