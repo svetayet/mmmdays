@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { renderChart, sliceDays } from './chart';
 
 let root: HTMLElement;
@@ -36,6 +37,32 @@ describe('sliceDays', () => {
     expect(bars[0].key).toBe('2026-12-01');
     expect(bars).toHaveLength(41); // Dec 31 + Jan 10
     expect(bars[bars.length - 1].key).toBe('2027-01-10');
+  });
+});
+
+describe('chart layout arithmetic', () => {
+  // No layout engine in happy-dom, so model the overflow deterministically:
+  // a flex row's minimum width is sum(min-width) + gaps. The bars must fit
+  // the widest chart (12 months ≈ 359 bars) into a 360px phone viewport.
+  const PHONE_VIEWPORT = 360;
+  const APP_PADDING = 28; // #app side padding 14+14
+  const CARD_PADDING = 24; // .card padding 12+12
+  const MAX_BARS = 365;
+
+  const css = readFileSync('src/styles.css', 'utf8');
+
+  const rule = (selector: string, prop: string): number | null => {
+    const m = css.match(new RegExp(`\\.bars(?:\\s|\\{)[^}]*\\}`))!;
+    const block = selector === '.bars' ? m[0] : css.match(new RegExp(`\\.bars \\.bar(?:\\s|\\{)[^}]*\\}`))![0];
+    const propMatch = block.match(new RegExp(`${prop}\\s*:\\s*([\\d.]+)px`));
+    return propMatch ? Number(propMatch[1]) : null;
+  };
+
+  it('bar row fits the widest range on a 360px phone', () => {
+    const gap = rule('.bars', 'gap') ?? 0;
+    const minWidth = rule('.bars .bar', 'min-width') ?? 0;
+    const minRowWidth = MAX_BARS * minWidth + (MAX_BARS - 1) * gap;
+    expect(minRowWidth).toBeLessThanOrEqual(PHONE_VIEWPORT - APP_PADDING - CARD_PADDING);
   });
 });
 

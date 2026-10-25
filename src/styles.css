@@ -429,7 +429,9 @@ body {
 .bars {
   display: flex;
   align-items: flex-end;
-  gap: 1px;
+  /* No gap / min-width: the row must shrink to one bar per day even for a
+     12-month range on a 360px phone (see chart layout arithmetic test). */
+  gap: 0;
   height: 34px;
   margin-top: 12px;
 }
@@ -437,7 +439,6 @@ body {
 .bars .bar {
   flex: 1;
   border-radius: 1px;
-  min-width: 1px;
 }
 
 .bars .b0 {
