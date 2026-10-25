@@ -20,6 +20,22 @@ describe('loadData', () => {
     expect(loadData()).toEqual({ v: 1, days: {} });
   });
 
+  it('keeps valid entries and drops only invalid ones (no silent total loss)', () => {
+    localStorage.setItem(
+      'mmmdays.v1',
+      JSON.stringify({ v: 1, days: { '2026-10-21': 2, '2026-10-22': 1, '2026-10-23': 3 } }),
+    );
+    expect(loadData()).toEqual({ v: 1, days: { '2026-10-21': 2, '2026-10-22': 1 } });
+  });
+
+  it('drops entries with malformed date keys, keeps the rest', () => {
+    localStorage.setItem(
+      'mmmdays.v1',
+      JSON.stringify({ v: 1, days: { 'yesterday': 1, '2026-10-21': 2 } }),
+    );
+    expect(loadData()).toEqual({ v: 1, days: { '2026-10-21': 2 } });
+  });
+
   it('wrong shape falls back to empty data', () => {
     localStorage.setItem('mmmdays.v1', JSON.stringify({ v: 1, days: 'nope' }));
     expect(loadData()).toEqual({ v: 1, days: {} });

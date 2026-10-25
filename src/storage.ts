@@ -5,27 +5,33 @@ const LANG_KEY = 'mmmdays.lang';
 
 export type Lang = 'ru' | 'en';
 
-function isAppData(value: unknown): value is AppData {
-  if (typeof value !== 'object' || value === null) return false;
-  const v = value as { v?: unknown; days?: unknown };
-  if (v.v !== 1) return false;
-  if (typeof v.days !== 'object' || v.days === null || Array.isArray(v.days)) return false;
-  for (const [key, state] of Object.entries(v.days)) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) return false;
-    if (state !== 1 && state !== 2) return false;
-  }
-  return true;
+function isValidEntry(key: string, state: unknown): state is 1 | 2 {
+  return /^\d{4}-\d{2}-\d{2}$/.test(key) && (state === 1 || state === 2);
 }
 
-/** Never throws: corrupted storage reads as empty data. */
+/**
+ * Never throws: corrupted storage reads as empty data. A stored object with
+ * the right shape keeps its valid day entries and drops only the invalid
+ * ones, so one bad entry can never wipe the rest of the history.
+ */
 export function loadData(): AppData {
   try {
     const raw = localStorage.getItem(DATA_KEY);
     if (raw === null) return { v: 1, days: {} };
     const parsed: unknown = JSON.parse(raw);
-    if (isAppData(parsed)) return parsed;
-    console.warn('MmmDays: stored data has wrong shape, starting fresh');
-    return { v: 1, days: {} };
+    if (typeof parsed !== 'object' || parsed === null) throw new Error('not an object');
+    const obj = parsed as { v?: unknown; days?: unknown };
+    if (obj.v !== 1 || typeof obj.days !== 'object' || obj.days === null || Array.isArray(obj.days)) {
+      throw new Error('wrong shape');
+    }
+    const days: AppData['days'] = {};
+    let dropped = 0;
+    for (const [key, state] of Object.entries(obj.days)) {
+      if (isValidEntry(key, state)) days[key] = state;
+      else dropped++;
+    }
+    if (dropped > 0) console.warn(`MmmDays: dropped ${dropped} invalid stored day(s)`);
+    return { v: 1, days };
   } catch {
     console.warn('MmmDays: stored data is corrupted, starting fresh');
     return { v: 1, days: {} };
