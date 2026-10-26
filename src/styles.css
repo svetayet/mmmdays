@@ -8,6 +8,18 @@
   --border: #E4E6E9;
   --shadow: 0 4px 14px rgba(43, 43, 43, 0.06);
   --radius: 18px;
+  --on-accent: #fff;
+}
+
+:root[data-theme='dark'] {
+  --bg: #16171B;
+  --card: #212227;
+  --text: #EDEEF0;
+  --muted: #949AA3;
+  --border: #323439;
+  --light: #B5848D;
+  --shadow: none;
+  --on-accent: #1B1416;
 }
 
 * {
@@ -65,7 +77,7 @@ body {
 
 .lang-btn.active {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 /* Cards */
@@ -178,13 +190,26 @@ body {
   pointer-events: none;
 }
 
+/* Light day: a smaller circle behind the number (z-index:-1 inside the
+   cell's own stacking context), heavy still fills the whole cell. */
 .cell.light {
+  position: relative;
+  z-index: 0;
+  background: transparent;
+}
+
+.cell.light::before {
+  content: '';
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
   background: var(--light);
+  z-index: -1;
 }
 
 .cell.heavy {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   font-weight: 600;
 }
 
@@ -216,6 +241,8 @@ body {
 
 .legend-item i.light {
   background: var(--light);
+  width: 7px;
+  height: 7px;
 }
 
 .legend-item i.heavy {
@@ -292,9 +319,7 @@ body {
 
 .data-card {
   margin-top: 10px;
-}
-
-.data-buttons {
+}.data-buttons {
   display: flex;
   gap: 10px;
   margin-top: 8px;
@@ -369,12 +394,23 @@ body {
 }
 
 .mday.light {
+  position: relative;
+  z-index: 0;
+  background: transparent;
+}
+
+.mday.light::before {
+  content: '';
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
   background: var(--light);
+  z-index: -1;
 }
 
 .mday.heavy {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   font-weight: 600;
 }
 
@@ -422,7 +458,7 @@ body {
 .chip.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   font-weight: 600;
 }
 
@@ -468,4 +504,86 @@ body {
   font-size: 9px;
   color: var(--muted);
   white-space: nowrap;
+}
+
+/* Settings screen */
+
+.settings-card {
+  margin-top: 10px;
+}
+
+.theme-pill {
+  display: flex;
+  background: var(--bg);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.theme-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-family: inherit;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.theme-btn.active {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.toggle-name {
+  font-size: 14px;
+}
+
+.toggle-hint {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.toggle {
+  appearance: none;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--border);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0;
+  transition: background 0.15s;
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  transition: left 0.15s;
+}
+
+.toggle:checked {
+  background: var(--accent);
+}
+
+.toggle:checked::after {
+  left: 21px;
 }

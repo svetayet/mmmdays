@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { renderCalendarView } from './calendarView';
 import { getDays } from '../store';
+import { setSettings } from '../settings';
 
 let root: HTMLElement;
 
@@ -53,6 +54,18 @@ describe('calendar view', () => {
 
     renderCalendarView(root, new Date(2026, 9, 23));
     expect(root.querySelector('.status-main')?.textContent).toContain('В процессе • 3 дня');
+  });
+
+  it('countLight on: the status card counts from the first marked day', () => {
+    const days = getDays();
+    days['2026-10-20'] = 1;
+    days['2026-10-21'] = 2;
+    days['2026-10-22'] = 2;
+    localStorage.setItem('mmmdays.v1', JSON.stringify({ v: 1, days }));
+
+    setSettings({ countLight: true });
+    renderCalendarView(root, new Date(2026, 9, 23));
+    expect(root.querySelector('.status-main')?.textContent).toContain('В процессе • 4 дня');
   });
 
   it('arrows navigate to the previous month', () => {

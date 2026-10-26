@@ -1,5 +1,5 @@
 import type { DaysMap } from '../types';
-import { computeCycleStats } from './cycles';
+import { computeCycleStats, type CycleOptions } from './cycles';
 import { parsePeriods } from './periods';
 import { addDays, diffDays, fromKey, toKey } from './dates';
 
@@ -14,7 +14,7 @@ export type Status =
  * The status card. "In progress" holds for one extra unmarked day after the
  * last mark (a one-day pause inside a period must not jump the card).
  */
-export function computeStatus(days: DaysMap, today: Date): Status {
+export function computeStatus(days: DaysMap, today: Date, opts: CycleOptions = {}): Status {
   const periods = parsePeriods(days);
   if (periods.length === 0) return { mode: 'no-data' };
 
@@ -23,11 +23,13 @@ export function computeStatus(days: DaysMap, today: Date): Status {
     (p) => p.start <= todayKey && todayKey <= toKey(addDays(fromKey(p.end), 1)),
   );
   if (covering) {
-    const anchor = covering.firstHeavy ?? covering.start;
+    const anchor = opts.countLight
+      ? covering.start
+      : covering.firstHeavy ?? covering.start;
     return { mode: 'in-progress', dayNumber: diffDays(fromKey(anchor), today) + 1 };
   }
 
-  const stats = computeCycleStats(periods);
+  const stats = computeCycleStats(periods, opts);
   if (stats.forecast === null) return { mode: 'no-forecast' };
 
   const daysLeft = diffDays(today, fromKey(stats.forecast));

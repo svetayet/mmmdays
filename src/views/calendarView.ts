@@ -5,6 +5,7 @@ import { parsePeriods } from '../logic/periods';
 import { computeStatus } from '../logic/status';
 import { daysWord, getLang, monthName, t, weekdayShort } from '../i18n';
 import { getDays, setDay, subscribe } from '../store';
+import { getSettings } from '../settings';
 import { el } from '../ui/dom';
 
 /** One tap walks none → light → heavy → none. */
@@ -60,7 +61,8 @@ function drawStatusCard(days: DaysMap, today: Date, lang: 'ru' | 'en') {
   const main = el('div', 'status-main');
   const sub = el('div', 'status-sub');
 
-  const status = computeStatus(days, today);
+  const opts = { countLight: getSettings().countLight };
+  const status = computeStatus(days, today, opts);
   if (status.mode === 'in-progress') {
     main.textContent = t('status.inProgress', { n: status.dayNumber, dw: daysWord(status.dayNumber, lang) });
   } else if (status.mode === 'until') {
@@ -73,7 +75,7 @@ function drawStatusCard(days: DaysMap, today: Date, lang: 'ru' | 'en') {
     main.textContent = t('status.noForecast');
   }
 
-  const stats = computeCycleStats(parsePeriods(days));
+  const stats = computeCycleStats(parsePeriods(days), opts);
   if (stats.lastCycleLength !== null) {
     sub.textContent = t('status.lastCycle', {
       n: stats.lastCycleLength,

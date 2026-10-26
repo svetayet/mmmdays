@@ -49,7 +49,7 @@ describe('app journey', () => {
       expect(state()).toBe(0); // leave storage as seeded
     }
 
-    // Switch to stats.
+    // Switch to stats: numbers and charts, but the data card moved to settings.
     const statsTab = [...app.querySelectorAll<HTMLElement>('.tab-btn')].find(
       (b) => b.dataset.view === 'view-stats',
     )!;
@@ -58,9 +58,11 @@ describe('app journey', () => {
     expect(stats.hidden).toBe(false);
     expect(stats.querySelector('.card-last .card-value')?.textContent).not.toBe('—');
     expect(stats.querySelectorAll('.tile-value')).toHaveLength(3);
+    // Seeded periods are 1 heavy + 4 light days: duration counts heavy only → 1.
+    expect(stats.querySelectorAll('.tile-value')[1]?.textContent).toBe('1');
     expect(stats.querySelector('.chips')).not.toBeNull();
     expect(stats.querySelector('.mini-cal-card')).not.toBeNull();
-    expect([...stats.querySelectorAll('button')].some((b) => b.textContent === 'Экспорт JSON')).toBe(true);
+    expect(stats.querySelector('.data-card')).toBeNull();
 
     // Carousel pages back into history (data is ~2.5 months old).
     const titleBefore = stats.querySelector('.mini-title')?.textContent;
@@ -68,6 +70,32 @@ describe('app journey', () => {
     expect(stats.querySelector('.mini-title')?.textContent).not.toBe(titleBefore);
     (stats.querySelector('.mini-next') as HTMLElement).click();
     expect(stats.querySelector('.mini-title')?.textContent).toBe(titleBefore);
+
+    // Settings tab: export lives here, dark theme applies, toggle persists.
+    const settingsTab = [...app.querySelectorAll<HTMLElement>('.tab-btn')].find(
+      (b) => b.dataset.view === 'view-settings',
+    )!;
+    settingsTab.click();
+    const settings = app.querySelector<HTMLElement>('#view-settings')!;
+    expect(settings.hidden).toBe(false);
+    expect([...settings.querySelectorAll('button')].some((b) => b.textContent === 'Экспорт JSON')).toBe(true);
+
+    const darkBtn = [...settings.querySelectorAll<HTMLElement>('.theme-btn')].find(
+      (b) => b.dataset.theme === 'dark',
+    )!;
+    darkBtn.click();
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(settings.querySelector('.theme-btn.active')?.getAttribute('data-theme')).toBe('dark');
+
+    const toggle = settings.querySelector<HTMLInputElement>('input.toggle')!;
+    toggle.checked = true;
+    toggle.dispatchEvent(new Event('change'));
+    expect(localStorage.getItem('mmmdays.settings')).toBe('{"theme":"dark","countLight":true}');
+
+    // The stats view re-rendered in place: all marked days now count.
+    // (1 stray light day + three 5-day periods) / 4 = 4.
+    expect(document.querySelector('.tab-btn.active')?.textContent).toBe('Настройки');
+    expect(stats.querySelectorAll('.tile-value')[1]?.textContent).toBe('4');
 
     // Language switch re-mounts the app in English (calendar tab active again), and back.
     (app.querySelector('.lang-btn:not(.active)') as HTMLElement).click();

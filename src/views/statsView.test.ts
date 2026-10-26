@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { renderStatsView } from './statsView';
 import { setDay } from '../store';
+import { setSettings } from '../settings';
 
 let root: HTMLElement;
 
@@ -54,11 +55,12 @@ describe('renderStatsView', () => {
     expect(root.querySelectorAll('.tile-label')[2]?.textContent).toBe('мало данных');
   });
 
-  it('mounts the chart and reserves mini-cal and data containers', () => {
+  it('mounts the chart and mini-cal; the data card no longer lives here', () => {
     renderStatsView(root, new Date(2026, 9, 25));
     expect(root.querySelector('.chips')).not.toBeNull();
     expect(root.querySelector('#mini-cal-mount')).not.toBeNull();
-    expect(root.querySelector('#data-mount')).not.toBeNull();
+    expect(root.querySelector('#data-mount')).toBeNull();
+    expect(root.querySelector('.data-card')).toBeNull();
   });
 
   it('re-renders when the store changes', () => {
@@ -67,4 +69,23 @@ describe('renderStatsView', () => {
     setDay('2026-10-15', 2);
     expect(root.querySelector('.card-last .card-value')?.textContent).toBe('15 октября');
   });
+
+  it('countLight setting switches duration and cycle math', () => {
+    // Two periods of 5 marked days each; two leading light days in the first.
+    seedDays({
+      '2026-09-17': 1, '2026-09-18': 1,
+      '2026-09-19': 2, '2026-09-20': 2, '2026-09-21': 2,
+      '2026-10-15': 1, '2026-10-16': 2, '2026-10-17': 2, '2026-10-18': 2, '2026-10-19': 2,
+    });
+    renderStatsView(root, new Date(2026, 9, 25));
+    expect(values()).toEqual(['27', '4', 'ровно']); // heavy anchors, heavy-day duration
+
+    setSettings({ countLight: true });
+    renderStatsView(root, new Date(2026, 9, 25));
+    expect(values()).toEqual(['28', '5', 'ровно']); // first marked day, full length
+  });
 });
+
+function values(): string[] {
+  return [...root.querySelectorAll('.tile-value')].map((n) => n.textContent);
+}

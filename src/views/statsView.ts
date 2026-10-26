@@ -3,10 +3,10 @@ import { computeCycleStats } from '../logic/cycles';
 import { fromKey } from '../logic/dates';
 import { parsePeriods } from '../logic/periods';
 import { getDays, subscribe } from '../store';
+import { getSettings } from '../settings';
 import { el } from '../ui/dom';
 import { renderChart } from '../ui/chart';
 import { renderMiniCal } from '../ui/miniCal';
-import { renderDataCard } from '../dataio';
 
 let currentRoot: HTMLElement | null = null;
 let lastToday = new Date();
@@ -23,7 +23,7 @@ function draw(): void {
   const root = currentRoot;
   if (!root) return;
   const today = lastToday;
-  const stats = computeCycleStats(parsePeriods(getDays()));
+  const stats = computeCycleStats(parsePeriods(getDays()), { countLight: getSettings().countLight });
   const lang = getLang();
   root.innerHTML = '';
 
@@ -54,10 +54,6 @@ function draw(): void {
   miniCal.id = 'mini-cal-mount';
   renderMiniCal(miniCal, today);
   root.appendChild(miniCal);
-  const data = el('div');
-  data.id = 'data-mount';
-  renderDataCard(data, today);
-  root.appendChild(data);
 }
 
 function drawCard(className: string, label: string, value: string, accent = false): HTMLElement {

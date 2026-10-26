@@ -20,10 +20,17 @@ export interface CycleStats {
   regularity: Regularity | null;
 }
 
-export function computeCycleStats(periods: Period[]): CycleStats {
-  const starts = periods
-    .filter((p) => p.firstHeavy !== null)
-    .map((p) => p.firstHeavy as string);
+export interface CycleOptions {
+  /** «Учитывать скудные дни»: on — every marked day counts (start = first marked day,
+   *  duration = full period length); off (default) — heavy days only. */
+  countLight?: boolean;
+}
+
+export function computeCycleStats(periods: Period[], opts: CycleOptions = {}): CycleStats {
+  const countLight = opts.countLight === true;
+  const starts = countLight
+    ? periods.map((p) => p.start)
+    : periods.filter((p) => p.firstHeavy !== null).map((p) => p.firstHeavy as string);
 
   const lengths: number[] = [];
   for (let i = 1; i < starts.length; i++) {
@@ -34,9 +41,11 @@ export function computeCycleStats(periods: Period[]): CycleStats {
     ? Math.round(lengths.reduce((s, n) => s + n, 0) / lengths.length)
     : null;
 
-  const heavyPeriods = periods.filter((p) => p.hasHeavy);
-  const avgDuration = heavyPeriods.length > 0
-    ? Math.round(heavyPeriods.reduce((s, p) => s + p.heavyDays, 0) / heavyPeriods.length)
+  const counted = countLight ? periods : periods.filter((p) => p.hasHeavy);
+  const avgDuration = counted.length > 0
+    ? Math.round(
+        counted.reduce((s, p) => s + (countLight ? p.lengthDays : p.heavyDays), 0) / counted.length,
+      )
     : null;
 
   const lastCycleLength = lengths.length > 0 ? lengths[lengths.length - 1] : null;

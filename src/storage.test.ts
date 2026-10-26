@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { loadData, loadLang, saveData, saveLang } from './storage';
+import { loadData, loadLang, loadSettings, saveData, saveLang, saveSettings } from './storage';
 
 beforeEach(() => {
   localStorage.clear();
@@ -60,5 +60,25 @@ describe('lang persistence', () => {
   it('unknown stored value reads as null', () => {
     localStorage.setItem('mmmdays.lang', 'de');
     expect(loadLang()).toBeNull();
+  });
+});
+
+describe('settings persistence', () => {
+  it('defaults: light theme, light days not counted', () => {
+    expect(loadSettings()).toEqual({ theme: 'light', countLight: false });
+  });
+
+  it('round-trips through saveSettings', () => {
+    saveSettings({ theme: 'dark', countLight: true });
+    expect(loadSettings()).toEqual({ theme: 'dark', countLight: true });
+  });
+
+  it('corrupted or partial settings fall back to defaults without throwing', () => {
+    localStorage.setItem('mmmdays.settings', '{oops');
+    expect(loadSettings()).toEqual({ theme: 'light', countLight: false });
+    localStorage.setItem('mmmdays.settings', JSON.stringify({ theme: 'blue' }));
+    expect(loadSettings()).toEqual({ theme: 'light', countLight: false });
+    localStorage.setItem('mmmdays.settings', JSON.stringify({ theme: 'dark' }));
+    expect(loadSettings()).toEqual({ theme: 'dark', countLight: false });
   });
 });

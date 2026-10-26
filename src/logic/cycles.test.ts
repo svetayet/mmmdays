@@ -122,3 +122,34 @@ describe('computeCycleStats', () => {
     expect(stats.avgCycle).toBe(28);
   });
 });
+
+describe('computeCycleStats with countLight', () => {
+  // period starting 2026-10-20: light, light, heavy → heavyDays 1, lengthDays 3
+  const mixed: Period[] = [
+    { start: '2026-10-20', end: '2026-10-22', firstHeavy: '2026-10-22', hasHeavy: true, lengthDays: 3, heavyDays: 1 },
+    { start: '2026-11-16', end: '2026-11-20', firstHeavy: '2026-11-16', hasHeavy: true, lengthDays: 5, heavyDays: 5 },
+  ];
+
+  it('on: starts anchor at period start, duration is full length', () => {
+    const stats = computeCycleStats(mixed, { countLight: true });
+    expect(stats.starts).toEqual(['2026-10-20', '2026-11-16']);
+    expect(stats.avgDuration).toBe(4); // (3 + 5) / 2
+    expect(stats.avgCycle).toBe(27);
+  });
+
+  it('off: heavy anchors and heavy-day duration (default)', () => {
+    const stats = computeCycleStats(mixed, { countLight: false });
+    expect(stats.starts).toEqual(['2026-10-22', '2026-11-16']);
+    expect(stats.avgDuration).toBe(3); // (1 + 5) / 2
+    expect(computeCycleStats(mixed).avgDuration).toBe(3);
+  });
+
+  it('on: light-only periods join starts and duration', () => {
+    const stats = computeCycleStats(
+      [lightPeriod('2026-05-02', 3), period('2026-06-08', 5)],
+      { countLight: true },
+    );
+    expect(stats.starts).toEqual(['2026-05-02', '2026-06-08']);
+    expect(stats.avgDuration).toBe(4); // (3 + 5) / 2
+  });
+});

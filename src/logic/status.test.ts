@@ -70,3 +70,14 @@ describe('computeStatus', () => {
     });
   });
 });
+
+describe('computeStatus with countLight', () => {
+  it('on: in-progress anchors at period start, not first heavy', () => {
+    // light 2026-10-20, heavy 2026-10-21, today 2026-10-21
+    const days = { '2026-10-20': 1, '2026-10-21': 2 } as const;
+    const today = new Date(2026, 9, 21);
+    expect(computeStatus({ ...days }, today)).toEqual({ mode: 'in-progress', dayNumber: 1 });
+    expect(computeStatus({ ...days }, today, { countLight: true })).toEqual({ mode: 'in-progress', dayNumber: 2 });
+    expect(computeStatus({ ...days }, new Date(2026, 9, 22), { countLight: true })).toEqual({ mode: 'in-progress', dayNumber: 3 });
+  });
+});
