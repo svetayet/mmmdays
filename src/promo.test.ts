@@ -43,5 +43,6 @@ describe('promo site', () => {
     expect(css).toContain('--accent: #E89AA4');
     expect(css).toContain('--wine: #693A42');
     expect(css).toContain('--light: #F4C6CC');
+    expect(css).toContain('color-scheme: only light'); // Chrome не затемняет промо принудительно
   });
 });

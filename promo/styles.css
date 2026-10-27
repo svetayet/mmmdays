@@ -1,6 +1,7 @@
 /* MmmDays promo — approved grey-rose design (same palette as the app's «Розовая» theme). */
 
 :root {
+  color-scheme: only light; /* сайт сам владеет цветами — Chrome не затемняет принудительно */
   --bg: #756E75;
   --card: #827A82;
   --deep: #675F68;

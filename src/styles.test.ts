@@ -7,13 +7,18 @@ const css = readFileSync('src/styles.css', 'utf8');
 describe('styles: approved design values', () => {
   it('dark theme overrides the palette under :root[data-theme="dark"]', () => {
     const dark = css.match(/:root\[data-theme='dark'\]\s*\{([^}]*)\}/)?.[1] ?? '';
-    expect(dark).toContain('--bg: #16171B');
-    expect(dark).toContain('--card: #212227');
+    expect(dark).toContain('--bg: #16171B');    expect(dark).toContain('--card: #212227');
     expect(dark).toContain('--accent: #E77482');
     expect(dark).toContain('--text: #B6B7B9');
     expect(dark).toContain('--border: #323439');
     expect(dark).toContain('--light: #693A42');
     expect(dark).toContain('--on-accent: #1B1416');
+    expect(dark).toContain('color-scheme: dark');
+  });
+
+  it('root declares light color-scheme so Chrome never force-darkens the app', () => {
+    const root = css.match(/^:root\s*\{([^}]*)\}/)?.[1] ?? '';
+    expect(root).toContain('color-scheme: light');
   });
 
   it('grey theme (промо-палитра) overrides the palette under :root[data-theme="grey"]', () => {
@@ -27,6 +32,7 @@ describe('styles: approved design values', () => {
     expect(grey).toContain('--light: #F4C6CC');
     expect(grey).toContain('--on-accent: #201519');
     expect(grey).toContain('--on-light: #693A42'); // винные цифры на бледном кружке
+    expect(grey).toContain('color-scheme: light'); // force-dark не трогает средний тон
   });
 
   it('accent text uses --on-accent so dark theme text stays readable', () => {

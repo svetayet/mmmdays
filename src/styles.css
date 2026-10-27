@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light; /* Chrome не применяет принудительное затемнение к нашим темам */
   --bg: #F5F6F7;
   --card: #FFFFFF;
   --light: #F4C6CC;
@@ -13,6 +14,7 @@
 }
 
 :root[data-theme='dark'] {
+  color-scheme: dark;
   --bg: #16171B;
   --card: #212227;
   --accent: #E77482;
@@ -27,6 +29,7 @@
 
 /* «Розовая» — серо-розовая средняя тема, палитра промо-страницы. */
 :root[data-theme='grey'] {
+  color-scheme: light;
   --bg: #756E75;
   --card: #827A82;
   --accent: #E89AA4;
