@@ -37,6 +37,12 @@ describe('promo site', () => {
     }
   });
 
+  it('both pages carry the meta color-scheme opt-out against Chromium auto-dark', () => {
+    for (const page of [ru, en]) {
+      expect(page).toContain('<meta name="color-scheme" content="only light">');
+    }
+  });
+
   it('styles pin the approved grey-rose palette', () => {
     expect(css).toContain('--bg: #756E75');
     expect(css).toContain('--card: #827A82');

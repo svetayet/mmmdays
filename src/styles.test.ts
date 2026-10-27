@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 /** Pins the user-approved design: dark palette values and the smaller light-day circle. */
 const css = readFileSync('src/styles.css', 'utf8');
+const html = readFileSync('index.html', 'utf8');
 
 describe('styles: approved design values', () => {
   it('dark theme overrides the palette under :root[data-theme="dark"]', () => {
@@ -16,9 +17,13 @@ describe('styles: approved design values', () => {
     expect(dark).toContain('color-scheme: dark');
   });
 
-  it('root declares light color-scheme so Chrome never force-darkens the app', () => {
+  it('root opts out of Chromium auto-dark with color-scheme: only light', () => {
     const root = css.match(/^:root\s*\{([^}]*)\}/)?.[1] ?? '';
-    expect(root).toContain('color-scheme: light');
+    expect(root).toContain('color-scheme: only light');
+  });
+
+  it('index.html carries the meta color-scheme opt-out (Chromium-documented channel)', () => {
+    expect(html).toContain('<meta name="color-scheme" content="only light" />');
   });
 
   it('grey theme (промо-палитра) overrides the palette under :root[data-theme="grey"]', () => {
@@ -32,7 +37,7 @@ describe('styles: approved design values', () => {
     expect(grey).toContain('--light: #F4C6CC');
     expect(grey).toContain('--on-accent: #201519');
     expect(grey).toContain('--on-light: #693A42'); // винные цифры на бледном кружке
-    expect(grey).toContain('color-scheme: light'); // force-dark не трогает средний тон
+    expect(grey).toContain('color-scheme: only light'); // force-dark не трогает средний тон
   });
 
   it('accent text uses --on-accent so dark theme text stays readable', () => {

@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light; /* Chrome не применяет принудительное затемнение к нашим темам */
+  color-scheme: only light; /* только «only light» отключает авто-затемнение Chromium */
   --bg: #F5F6F7;
   --card: #FFFFFF;
   --light: #F4C6CC;
@@ -29,7 +29,7 @@
 
 /* «Розовая» — серо-розовая средняя тема, палитра промо-страницы. */
 :root[data-theme='grey'] {
-  color-scheme: light;
+  color-scheme: only light;
   --bg: #756E75;
   --card: #827A82;
   --accent: #E89AA4;
