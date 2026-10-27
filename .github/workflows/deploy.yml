@@ -27,8 +27,11 @@ jobs:
 
       - run: npm ci
 
-      # tsc --noEmit && vite build → dist/ (also runs the PWA plugin: SW + manifest)
+      # tsc --noEmit && vite build → dist/ (also runs the PWA plugin: SW + manifest);
+      # absolute base so Android browsers get unambiguous install URLs
       - run: npm run build
+        env:
+          DEPLOY_BASE: /mmmdays/app/
 
       # Site layout: promo at the root, the app under /app/ —
       # promo's CTA href="app/" and icon links expect exactly this.
