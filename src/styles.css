@@ -9,6 +9,7 @@
   --shadow: 0 4px 14px rgba(43, 43, 43, 0.06);
   --radius: 18px;
   --on-accent: #fff;
+  --on-light: #2B2B2B;
 }
 
 :root[data-theme='dark'] {
@@ -21,6 +22,7 @@
   --light: #693A42;
   --shadow: none;
   --on-accent: #1B1416;
+  --on-light: #B6B7B9;
 }
 
 /* «Розовая» — серо-розовая средняя тема, палитра промо-страницы. */
@@ -34,6 +36,7 @@
   --light: #F4C6CC;
   --shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
   --on-accent: #201519;
+  --on-light: #693A42;
 }
 
 * {
@@ -210,6 +213,7 @@ body {
   position: relative;
   z-index: 0;
   background: transparent;
+  color: var(--on-light);
 }
 
 .cell.light::before {
@@ -411,6 +415,7 @@ body {
   position: relative;
   z-index: 0;
   background: transparent;
+  color: var(--on-light);
 }
 
 .mday.light::before {

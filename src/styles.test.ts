@@ -26,6 +26,7 @@ describe('styles: approved design values', () => {
     expect(grey).toContain('--border: #908891');
     expect(grey).toContain('--light: #F4C6CC');
     expect(grey).toContain('--on-accent: #201519');
+    expect(grey).toContain('--on-light: #693A42'); // винные цифры на бледном кружке
   });
 
   it('accent text uses --on-accent so dark theme text stays readable', () => {
@@ -39,6 +40,7 @@ describe('styles: approved design values', () => {
       const block = css.match(new RegExp(`${selector.replace('.', '\\.')}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
       expect(block).toContain('background: transparent');
       expect(block).toContain('position: relative');
+      expect(block).toContain('color: var(--on-light)');
       const before = css.match(
         new RegExp(`${selector.replace('.', '\\.')}::before\\s*\\{([^}]*)\\}`),
       )?.[1] ?? '';
