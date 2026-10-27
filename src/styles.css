@@ -23,6 +23,19 @@
   --on-accent: #1B1416;
 }
 
+/* «Розовая» — серо-розовая средняя тема, палитра промо-страницы. */
+:root[data-theme='grey'] {
+  --bg: #756E75;
+  --card: #827A82;
+  --accent: #E89AA4;
+  --text: #F5EFF2;
+  --muted: #CDC3CD;
+  --border: #908891;
+  --light: #F4C6CC;
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  --on-accent: #201519;
+}
+
 * {
   box-sizing: border-box;
 }

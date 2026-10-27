@@ -25,6 +25,11 @@ export function subscribe(fn: () => void): () => void {
 /** Set at startup too, so a stored dark theme survives reloads. */
 export function applyTheme(theme: Settings['theme']): void {
   document.documentElement.dataset.theme = theme;
+  const metaColors: Record<Settings['theme'], string> = {
+    light: '#F5F6F7',
+    grey: '#756E75',
+    dark: '#16171B',
+  };
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', theme === 'dark' ? '#16171B' : '#F5F6F7');
+  if (meta) meta.setAttribute('content', metaColors[theme]);
 }

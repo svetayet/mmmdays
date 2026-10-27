@@ -33,16 +33,21 @@ function draw(): void {
   root.appendChild(data);
 }
 
-function drawThemeCard(theme: 'light' | 'dark'): HTMLElement {
+function drawThemeCard(theme: 'light' | 'grey' | 'dark'): HTMLElement {
   const card = el('div', 'card settings-card');
   const label = el('div', 'card-label');
   label.textContent = t('settings.theme');
   const pill = el('div', 'theme-pill');
-  for (const option of ['light', 'dark'] as const) {
+  const labels: Record<'light' | 'grey' | 'dark', string> = {
+    light: 'settings.themeLight',
+    grey: 'settings.themeRose',
+    dark: 'settings.themeDark',
+  };
+  for (const option of ['light', 'grey', 'dark'] as const) {
     const btn = el('button', 'theme-btn' + (theme === option ? ' active' : ''));
     btn.type = 'button';
     btn.dataset.theme = option;
-    btn.textContent = t(option === 'light' ? 'settings.themeLight' : 'settings.themeDark');
+    btn.textContent = t(labels[option]);
     btn.addEventListener('click', () => setSettings({ theme: option }));
     pill.appendChild(btn);
   }

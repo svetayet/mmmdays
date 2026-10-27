@@ -5,7 +5,7 @@ const LANG_KEY = 'mmmdays.lang';
 const SETTINGS_KEY = 'mmmdays.settings';
 
 export type Lang = 'ru' | 'en';
-export type Theme = 'light' | 'dark';
+export type Theme = 'light' | 'grey' | 'dark';
 
 export interface Settings {
   theme: Theme;
@@ -69,7 +69,7 @@ export function loadSettings(): Settings {
     if (typeof parsed !== 'object' || parsed === null) return { ...DEFAULT_SETTINGS };
     const obj = parsed as { theme?: unknown; countLight?: unknown };
     return {
-      theme: obj.theme === 'dark' ? 'dark' : 'light',
+      theme: obj.theme === 'dark' || obj.theme === 'grey' ? obj.theme : 'light',
       countLight: obj.countLight === true,
     };
   } catch {

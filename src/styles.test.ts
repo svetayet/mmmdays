@@ -16,6 +16,18 @@ describe('styles: approved design values', () => {
     expect(dark).toContain('--on-accent: #1B1416');
   });
 
+  it('grey theme (промо-палитра) overrides the palette under :root[data-theme="grey"]', () => {
+    const grey = css.match(/:root\[data-theme='grey'\]\s*\{([^}]*)\}/)?.[1] ?? '';
+    expect(grey).toContain('--bg: #756E75');
+    expect(grey).toContain('--card: #827A82');
+    expect(grey).toContain('--accent: #E89AA4');
+    expect(grey).toContain('--text: #F5EFF2');
+    expect(grey).toContain('--muted: #CDC3CD');
+    expect(grey).toContain('--border: #908891');
+    expect(grey).toContain('--light: #F4C6CC');
+    expect(grey).toContain('--on-accent: #201519');
+  });
+
   it('accent text uses --on-accent so dark theme text stays readable', () => {
     expect(css).not.toMatch(/--accent[^;]*;[^}]*color:\s*#fff/);
     expect(css.match(/color:\s*#fff/g)).toBeNull();

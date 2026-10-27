@@ -17,7 +17,7 @@ describe('renderSettingsView', () => {
     expect(root.querySelector('.section-title')?.textContent).toBe('Настройки');
 
     const pills = [...root.querySelectorAll('.theme-btn')];
-    expect(pills.map((b) => b.textContent)).toEqual(['Светлая', 'Тёмная']);
+    expect(pills.map((b) => b.textContent)).toEqual(['Светлая', 'Розовая', 'Тёмная']);
     expect(pills.find((b) => b.classList.contains('active'))?.textContent).toBe('Светлая');
 
     const toggle = root.querySelector<HTMLInputElement>('input.toggle')!;
@@ -37,6 +37,17 @@ describe('renderSettingsView', () => {
     expect(document.documentElement.dataset.theme).toBe('dark');
     expect(localStorage.getItem('mmmdays.settings')).toBe('{"theme":"dark","countLight":false}');
     expect(root.querySelector('.theme-btn.active')?.textContent).toBe('Тёмная');
+  });
+
+  it('rose pill click applies the grey theme and persists', () => {
+    renderSettingsView(root, new Date(2026, 9, 25));
+    const rose = [...root.querySelectorAll('.theme-btn')].find(
+      (b) => b.textContent === 'Розовая',
+    ) as HTMLElement;
+    rose.click();
+    expect(document.documentElement.dataset.theme).toBe('grey');
+    expect(localStorage.getItem('mmmdays.settings')).toBe('{"theme":"grey","countLight":false}');
+    expect(root.querySelector('.theme-btn.active')?.getAttribute('data-theme')).toBe('grey');
   });
 
   it('countLight toggle persists and redraws checked state', () => {

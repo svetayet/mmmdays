@@ -31,6 +31,8 @@ describe('settings module', () => {
     expect(document.documentElement.dataset.theme).toBe('dark');
     setSettings({ theme: 'light' });
     expect(document.documentElement.dataset.theme).toBe('light');
+    setSettings({ theme: 'grey' });
+    expect(document.documentElement.dataset.theme).toBe('grey');
   });
 
   it('countLight change alone does not touch the theme attribute', () => {

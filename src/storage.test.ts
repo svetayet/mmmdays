@@ -73,10 +73,19 @@ describe('settings persistence', () => {
     expect(loadSettings()).toEqual({ theme: 'dark', countLight: true });
   });
 
+  it('grey theme round-trips and survives the guard', () => {
+    saveSettings({ theme: 'grey', countLight: false });
+    expect(loadSettings()).toEqual({ theme: 'grey', countLight: false });
+    localStorage.setItem('mmmdays.settings', JSON.stringify({ theme: 'grey' }));
+    expect(loadSettings()).toEqual({ theme: 'grey', countLight: false });
+  });
+
   it('corrupted or partial settings fall back to defaults without throwing', () => {
     localStorage.setItem('mmmdays.settings', '{oops');
     expect(loadSettings()).toEqual({ theme: 'light', countLight: false });
     localStorage.setItem('mmmdays.settings', JSON.stringify({ theme: 'blue' }));
+    expect(loadSettings()).toEqual({ theme: 'light', countLight: false });
+    localStorage.setItem('mmmdays.settings', JSON.stringify({ theme: 'pink' }));
     expect(loadSettings()).toEqual({ theme: 'light', countLight: false });
     localStorage.setItem('mmmdays.settings', JSON.stringify({ theme: 'dark' }));
     expect(loadSettings()).toEqual({ theme: 'dark', countLight: false });
