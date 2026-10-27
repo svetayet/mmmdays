@@ -9,9 +9,10 @@ describe('styles: approved design values', () => {
     const dark = css.match(/:root\[data-theme='dark'\]\s*\{([^}]*)\}/)?.[1] ?? '';
     expect(dark).toContain('--bg: #16171B');
     expect(dark).toContain('--card: #212227');
-    expect(dark).toContain('--text: #EDEEF0');
+    expect(dark).toContain('--accent: #E77482');
+    expect(dark).toContain('--text: #B6B7B9');
     expect(dark).toContain('--border: #323439');
-    expect(dark).toContain('--light: #B5848D');
+    expect(dark).toContain('--light: #693A42');
     expect(dark).toContain('--on-accent: #1B1416');
   });
 

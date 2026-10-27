@@ -14,10 +14,11 @@
 :root[data-theme='dark'] {
   --bg: #16171B;
   --card: #212227;
-  --text: #EDEEF0;
+  --accent: #E77482;
+  --text: #B6B7B9;
   --muted: #949AA3;
   --border: #323439;
-  --light: #B5848D;
+  --light: #693A42;
   --shadow: none;
   --on-accent: #1B1416;
 }
