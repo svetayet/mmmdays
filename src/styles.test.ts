@@ -60,4 +60,17 @@ describe('styles: approved design values', () => {
       expect(before).toMatch(/inset:\s*\d+%/); // smaller diameter than the heavy circle
     }
   });
+
+  it('view content keeps 16px of breathing room above the tab bar', () => {
+    const main = css.match(/^main\s*\{([^}]*)\}/m)?.[1] ?? '';
+    expect(main).toContain('padding-bottom: 16px');
+  });
+
+  it('header logo: accent circle with a light inner dot, promo-style', () => {
+    const block = css.match(/\.logo-mark\s*\{([^}]*)\}/)?.[1] ?? '';
+    expect(block).toContain('background: var(--accent)');
+    expect(block).toContain('border-radius: 50%');
+    const after = css.match(/\.logo-mark::after\s*\{([^}]*)\}/)?.[1] ?? '';
+    expect(after).toContain('background: var(--light)');
+  });
 });

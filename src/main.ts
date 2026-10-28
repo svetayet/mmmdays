@@ -26,6 +26,11 @@ export function mountApp(): void {
   const title = document.createElement('span');
   title.className = 'app-title';
   title.textContent = 'MmmDays';
+  const brand = document.createElement('div');
+  brand.className = 'brand';
+  const mark = document.createElement('span');
+  mark.className = 'logo-mark';
+  brand.append(mark, title);
   const langPill = document.createElement('div');
   langPill.className = 'lang-pill';
   for (const lang of ['ru', 'en'] as Lang[]) {
@@ -39,7 +44,7 @@ export function mountApp(): void {
     });
     langPill.appendChild(btn);
   }
-  header.append(title, langPill);
+  header.append(brand, langPill);
 
   const views = new Map<ViewId, HTMLElement>();
   for (const { view } of TABS) {

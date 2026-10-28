@@ -62,6 +62,10 @@ body {
   padding: 14px 14px calc(14px + env(safe-area-inset-bottom));
 }
 
+main {
+  padding-bottom: 16px; /* контент не прилипает к панели вкладок */
+}
+
 /* Header */
 
 .header {
@@ -75,6 +79,34 @@ body {
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 0.2px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* «Кружок в кружочке» — фирменный знак с промо-сайта */
+.logo-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.logo-mark::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--light);
+  bottom: 2px;
+  right: 2px;
 }
 
 .lang-pill {

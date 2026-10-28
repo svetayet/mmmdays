@@ -21,6 +21,15 @@ describe('app shell', () => {
     expect(tabs.map((b) => b.textContent)).toEqual(['Календарь', 'Статистика', 'Настройки']);
   });
 
+  it('header carries the double-circle logo mark before the title', () => {
+    mountApp();
+    const mark = document.querySelector('.header .brand .logo-mark');
+    expect(mark).not.toBeNull();
+    const brand = mark!.closest('.brand')!;
+    expect(brand.firstElementChild).toBe(mark);
+    expect(brand.querySelector('.app-title')?.textContent).toBe('MmmDays');
+  });
+
   it('shows calendar first, other views hidden', () => {
     mountApp();
     expect((document.getElementById('view-calendar') as HTMLElement).hidden).toBe(false);
